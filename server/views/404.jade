@@ -1,0 +1,26 @@
+html(lang="en", xmlns:ng="http://angularjs.org")
+    head
+        meta(charset='utf8')
+        title BrighterLink Platform
+        != CDN('/assets/img/favicon.ico')
+        //- style sheets
+        link(rel='stylesheet', href='//cloud.webtype.com/css/f3ad5809-8f3d-4d94-a57b-31fdc688f3fa.css')
+        != CDN('/assets/css/general.min.css')
+        != CDN('/assets/css/components.min.css')
+    body
+        div.container-fluid
+            div.not-found.top-bar
+                div(class='l-header')
+                a(href='#', class='navbar-brand') Holy Crap!!!
+            div.not-found.content
+                div.robot
+                div.quote-message-container
+                    div.quote-mark
+                        p.guide Du-oh! Our apologies, this is almost certainly not the page you were looking for.
+                        p.link
+                            a(href='/login') Login or Signup
+                        p.link
+                            a(href='/help') Help & Support
+                    div.message
+                        div.title 404
+                        span.body Page not found

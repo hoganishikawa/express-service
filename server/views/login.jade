@@ -1,0 +1,325 @@
+mixin ie(condition, content)
+    | <!--[!{condition}]>!{content}<![endif]-->
+// doctype html
+html(lang="en")
+    head
+        meta(charset='utf8')
+        meta(name="viewport", content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1")
+        title BrighterLink Login
+        != CDN('/assets/img/favicon.ico')
+        //- style sheets
+        link(href="//cloud.webtype.com/css/f3ad5809-8f3d-4d94-a57b-31fdc688f3fa.css", rel="stylesheet", type="text/css")
+        != CDN('/assets/css/general.min.css')
+        != CDN('/components/platform-panel/dist/platform.min.css')
+        //- Include KISSMetrics tracking code
+        != CDN('/lib/angulartics/kissmetrics.js')
+        script(type="text/javascript").
+            var oa = document.createElement('script');
+            oa.type = 'text/javascript'; oa.async = true;
+            oa.src = '//brightergy.api.oneall.com/socialize/library.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(oa, s);
+        <!--[if lte IE 8]>
+        != CDN('/lib/JSON-js/json2.js')
+        <![endif]-->
+    body
+        div#wrapper
+            div.main-container
+                div#page-content-wrapper
+                    div.platform-login-wrapper
+                        div.col-lg-12
+                            div.header
+                                div.row
+                                    img(src="/components/platform-panel/img/login-logo.png")
+                                div.row
+                                    img(class="text" src="/components/platform-panel/img/login-text.png")
+                            div.col-xs-12
+                                div.col-sm-6
+                                    div.col-sm-3
+                                    div.login-content.col-sm-9
+                                        div.alert
+                                            span
+                                        div.left-wrap.col-sm-5
+                                            div.login-form
+                                                form(id="login-form")
+                                                    div.heading.row
+                                                        h5 Sign in
+                                                        p with your email
+                                                    div.row
+                                                        p Username
+                                                        input(type="text" id="email" name="email" placeholder="antony@brightergy.com")
+                                                    div.row
+                                                        p Password
+                                                        input(type="password" id="password" name="password" placeholder="********")
+                                                    div.row
+                                                        a(href="#" class="btn signin login-btn") Sign in
+                                                    div.row
+                                                        div.login-actions
+                                                            div.forgot-password
+                                                                a(id="forget-password") Forgot password?
+                                                            div.remember-me
+                                                                span Remember me
+                                                                input(type="checkbox")
+                                            div.forgot-form
+                                                form(id="forgot-form")
+                                                    div.heading.row
+                                                        h5 Forget Password?
+                                                    div.row
+                                                        p Email
+                                                        input(type="text" id="emailForgot" name="emailForgot", placeholder="Email")
+                                                    div.row
+                                                        a(href="#" class="btn signin forgot-pass-btn") Send
+                                                    div.row
+                                                        span Remembered? &nbsp;&nbsp;
+                                                            a(id="login") Try to log in again.
+                                        div.split-wrap.col-sm-1
+                                            div.split-line
+                                            span or
+                                            div.split-line
+                                        div.right-wrap.col-sm-5
+                                            div.row
+                                                h5 Sign in
+                                                p with your social account
+                                            div.row
+                                                div(id="oa_social_login_container")
+                            div.copyright.col-xs-12
+                                div.col-sm-8
+                                div.col-sm-4
+                                    p BrighterLink &copy; 2015. All rights reserved.&nbsp;
+                                    p
+                                        span |&nbsp;
+                                        a(href="#") Privacy Policy&nbsp;
+                                        font |&nbsp;
+                                        a(href="#") Terms of Use
+    != CDN('/lib/bugreport/bug.report.js')
+    != CDN('/lib/jquery/jquery.js')
+    != CDN('/lib/validate/js/jquery.validate.min.js')
+    != CDN('/lib/angular/angular.min.js')
+    != CDN('/lib/angular/angular-animate.min.js')
+    != CDN('/lib/angular/angular-route.min.js')
+    != CDN('/lib/angular/angular-sanitize.js')
+    script.
+        window.config = "#{(new Buffer(JSON.stringify(config))).toString('base64')}"
+    script(src='/components/component.js')
+    script(src='/components/services/interceptors.js')
+    script(src='/components/services/notify.js')
+    script(src='/components/services/toggle.js')
+    script(src='/components/platform-panel/platform-panel.js')
+
+    script(src='/bl-test/app.js')
+    script(src='/bl-test/js/controllers/test.js')
+    script(type='text/javascript').
+        /* Replace #your_callback_uri# with the url to your own callback script */
+
+        var your_callback_script = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port : '') + '/v1/sociallogin';
+        var site_url = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port : '');
+
+        //console.log('CALLBACK URL = ' + your_callback_script);
+
+
+        /*var fullUrl = utils.getDomain(req, false);*/
+
+        /* Embeds the buttons into the container oa_social_login_container */
+        var _oneall = _oneall || [];
+        _oneall.push(['social_login', 'set_providers', ['google', 'facebook', 'twitter', 'amazon', 'yahoo', 'windowslive', 'linkedin', 'github', 'openid']]);
+        _oneall.push(['social_login', 'set_grid_sizes', [3,]]);
+        _oneall.push(['social_login', 'set_callback_uri', your_callback_script]);
+        _oneall.push(['social_login', 'set_custom_css_uri', site_url + '/components/platform-panel/dist/platform.min.css']);
+        _oneall.push(['social_login', 'do_render_ui', 'oa_social_login_container']);
+        function getCook(cookiename)
+        {
+            var cookiestring=RegExp(""+cookiename+"[^;]+").exec(document.cookie);
+            return unescape(!!cookiestring ? cookiestring.toString().replace(/^[^=]+./,"") : "");
+        }
+        var user_cookie = getCook('apex__BV_SESSION_ID');
+        var user_cookie_status = getCook('status');
+
+        $(function () {
+            /*if (user_cookie_status) {
+                notyfy({
+                        text: '<strong>' + user_cookie_status + '</strong><br><div class="click-close">{Click this bar to Close}',
+                        type: 'error',
+                        dismissQueue: true
+                    });
+            }*/
+            /*if ((user_cookie == "undefined") || (user_cookie == null) || (user_cookie == "")) {
+                notyfy({
+                    text: '<strong>If this is your first time logging in, please use your email and password, then add your Social Logins by editing your Profile.</strong><br><div class="click-close">{Click this bar to Close}',
+                    type: 'success',
+                    dismissQueue: true
+                });
+            }*/
+            if ($("input.checkbox, input.radio, input:file.input-file").uniform) {
+                $("input.checkbox, input.radio, input:file.input-file").uniform({
+                    radioClass: 'radios'
+                });
+            }
+
+            $('.login-btn').click(function() {
+                var url = '/v1/users/login';
+                if ((document.location.host.indexOf('-dev') > 0) || (document.location.host.indexOf('-qa') > 0)) {
+                    url = document.location.protocol + '//api-' + document.location.host + '/v1/users/login';
+                }
+                var email = $('#email').val();
+                var password = $('#password').val();
+                var remember = $('#remember').is(':checked');
+                var data = {'email': email, 'password': password, 'rememberMe': remember};
+                var responseMessage;
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: data,
+                    xhrFields: { withCredentials:true },
+                    cache: false,
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.success == 1) {
+                            location.href = document.location.protocol + '//' + document.location.host;
+                        } else {
+                            processLogin(data.message);
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        try {
+                            responseMessage = JSON.parse(jqXHR.responseText).message
+                        } catch (e) {
+                            responseMessage = "Incorrect login or password";
+                        }
+                        processLogin(responseMessage);
+                    }
+                });
+            });
+
+            $('.forgot-pass-btn').click(function() {
+                var url = '/v1/users/password/';
+                if ((document.location.host.indexOf('-dev') > 0) || (document.location.host.indexOf('-qa') > 0)) {
+                    url = document.location.protocol + '//api-' + document.location.host + '/v1/users/password/';
+                }
+                var emailForgot = $('#emailForgot').val();
+                var data = {'email': emailForgot};
+                $.ajax({
+                    url: url + emailForgot,
+                    type: 'POST',
+                    data: data,
+                    cache: false,
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.success == 1) {
+                            processForgotPassword('OK');
+                        } else {
+                            processForgotPassword(data.message);
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        processForgotPassword(JSON.parse(jqXHR.responseText).message);
+                    }
+                });
+            });
+
+            $('#password').live('keypress',function(e){
+                 var p = e.which;
+                 if(p==13){
+                     $('.login-btn').click();
+                 }
+            });
+
+            $('#forget-password').click(function (){
+                $('.forgot-form').show();
+                $('.login-form').hide();
+             });
+
+             $('#login').click(function (){
+                $('.forgot-form').hide();
+                $('.login-form').show();
+             });
+
+             $('#email').keydown(function(e){
+                if( e.keyCode == 13 )
+                {
+                    if($(".login-form form").valid()){
+                      $('.alert').hide();
+                      $('.login-btn').click();
+                    }
+                }
+             });
+
+             $('#password').keydown(function(e){
+
+                if( e.keyCode == 13 )
+                {
+                    if($(".login-form form").valid()){
+                      $('.alert').hide();
+                      $('.login-btn').click();
+                    }
+                }
+             });
+
+             $(function (accForm) {
+                accForm('.login-form form').validate({
+                        rules: {
+                                email: {
+                                        required: {
+                                               depends:function(){
+                                                   $(this).val($.trim($(this).val()));
+                                                   return true;
+                                               }
+                                           },
+                                        email: true,
+                                        maxlength: 100
+                                },
+                                password: {
+                                        required: true
+                                }
+                        },
+                        messages: {
+                                email: {
+                                        required: "Please enter a Email Address",
+                                        email: "Please enter a valid Email Address",
+                                        maxlength: "Email Address must be no more than 100 characters"
+                                },
+                                password: {
+                                        required: "Please enter a Password"
+                                }
+                        },
+
+                        highlight: function (label) {
+                                $(label).closest('.row').addClass('error');
+                        },
+                        success: function (label) {
+                                $(label).closest('.row').removeClass('error');
+                        },
+                        errorPlacement: function (error, label) {
+                                $(label).closest('.row').append(error);
+                        }
+                 })
+             });
+        });
+
+        function processLogin(status) {
+            console.log('showErrorMessage: ' + status);
+            $('.alert').show();
+            if ($('.alert').hasClass('alert-success')) {
+                $('.alert').removeClass('alert-success');
+            }
+            $('.alert').addClass('alert-error');
+            $('.alert span').text(status);
+        }
+
+        function processForgotPassword(status) {
+            console.log('processForgotPassword: ' + status);
+            if(status === 'OK') {
+                $('.alert').show();
+                if ($('.alert').hasClass('alert-error')) {
+                    $('.alert').removeClass('alert-error');
+                }
+                $('.alert').addClass('alert-success');
+                $('.alert span').text('Email has been sent');
+            } else {
+                $('.alert').show();
+                if ($('.alert').hasClass('alert-success')) {
+                    $('.alert').removeClass('alert-success');
+                }
+                $('.alert').addClass('alert-error');
+                $('.alert span').text(status);
+            }
+        }
